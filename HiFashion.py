@@ -4,6 +4,10 @@ import pygame.camera
 from pygame.locals import *
 import sys
 
+import FitClothes
+import Closet
+import ChangeColor
+
 pygame.init()
 pygame.camera.init()
 
