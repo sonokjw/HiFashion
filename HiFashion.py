@@ -1,7 +1,3 @@
-import cProfile
-from glob import glob
-
-from turtle import window_width
 import pygame
 import pygame.camera
 import pygame.image
@@ -10,8 +6,10 @@ import sys
 import enum
 
 import FitClothes
-import Closet
 import ChangeColor
+from Home import Home
+from Fav import Fav
+from Closet import Closet
 
 # defining constants
 WIN_HEIGHT = 700
@@ -33,8 +31,6 @@ class Modes(enum.Enum):
 
 cur_mode = Modes.HOME # current screen of app
 ended = False # whether app exited
-person = False # whether a person is detected
-clothes_i = 0 # index of current clothes in list
 
 # Load Clothes
 # transparent clothes: https://www.transparentpng.com/cats/shirt-1436.html
@@ -81,6 +77,7 @@ class Button:
             cur_mode = Modes.HOME
         else:
             cur_mode = self.mode
+        print("Current mode:", cur_mode)
 
     def on_click(self, event):
         x, y = pygame.mouse.get_pos()
@@ -117,47 +114,39 @@ fav_icon_hover.fill((DARKEN, DARKEN, DARKEN), special_flags=pygame.BLEND_RGB_SUB
 closet_btn = Button([closet_icon, closet_icon_hover], (WIN_WIDTH-100, WIN_HEIGHT-100), Modes.CLOSET)
 fav_btn = Button([fav_icon, fav_icon_hover], (25, WIN_HEIGHT-100), Modes.FAV)
 
-# Key Press Detection Setup
-pressing = False
-cur_key = None
-
+# App pages Setup
+home_pg = Home(NUM_CLOTHES)
 
 ########### App Loop ###########
 while not ended:
     image = cam.get_image()
     win.blit(image, (0,0))
 
+    # buttons or quit events
     for event in pygame.event.get():
         if event.type ==  pygame.QUIT:
             ended = True
-        closet_btn.on_click(event)
-        fav_btn.on_click(event)
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_c]:
-        if not pressing:
-            pressing = True
-            cur_key = 'c'
-    elif keys[pygame.K_LEFT]:
-        if not pressing:
-            pressing = True
-            cur_key = 'left'
-    elif pressing:
-        pressing = False
-        if cur_key == 'c':
-            person = not person
-            print('showing clothes:', person)
-        elif cur_key == 'left' and person:
-            clothes_i = (clothes_i+1) % len(clothes)
-            print('next clothes')
-            
+        if cur_mode != Modes.FAV:
+            closet_btn.on_click(event)
+        if cur_mode != Modes.CLOSET:
+            fav_btn.on_click(event)
     
-    if person:
-        clothes[clothes_i] = FitClothes.fitclothes(clothes[clothes_i])
-        win.blit(clothes[clothes_i], (400,150))
+    # update current page
+    if cur_mode == Modes.HOME:
+        person, clothes_i = home_pg.update()
+        if person:
+            clothes[clothes_i] = FitClothes.fitclothes(clothes[clothes_i])
+            win.blit(clothes[clothes_i], (400,150))
+    elif cur_mode == Modes.CLOSET:
+        pass
+    else: # Fav
+        pass
 
-    closet_btn.show()
-    fav_btn.show()
+    # update button display
+    if cur_mode != Modes.FAV:
+        closet_btn.show()
+    if cur_mode != Modes.CLOSET:
+        fav_btn.show()
     
     pygame.display.update()
         
