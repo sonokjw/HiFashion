@@ -1,6 +1,7 @@
 '''
-
+resize the given cloth based on distance
+of user from the screen
 '''
 
-def fitclothes(cloth):
+def fitClothes(cloth):
     return cloth

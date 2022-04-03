@@ -5,8 +5,10 @@ from pygame.locals import *
 import sys
 import enum
 
-import FitClothes
+from FitClothes import fitClothes
+from Home import saveOutfit
 import ChangeColor
+
 from Home import Home
 from Fav import Fav
 from Closet import Closet
@@ -44,7 +46,19 @@ while True:
         break
     i += 1
 
+# Load Saved Outfits
+favs = []
+j = 0
+while True:
+    try:
+        c = pygame.transform.scale(pygame.image.load(f'favs/{j}.png'), IMAGE_SIZE)
+        favs.append(c)
+    except:
+        break
+    j += 1
+
 NUM_CLOTHES = i
+NUM_FAVS = j
 NUM_COLOR = 1
 
 # in case we want another number of clothes
@@ -116,12 +130,11 @@ fav_btn = Button([fav_icon, fav_icon_hover], (25, WIN_HEIGHT-100), Modes.FAV)
 
 # App pages Setup
 home_pg = Home(NUM_CLOTHES)
+closet_pg = Closet(win)
+fav_pg = Fav(win)
 
 ########### App Loop ###########
 while not ended:
-    image = cam.get_image()
-    win.blit(image, (0,0))
-
     # buttons or quit events
     for event in pygame.event.get():
         if event.type ==  pygame.QUIT:
@@ -133,14 +146,19 @@ while not ended:
     
     # update current page
     if cur_mode == Modes.HOME:
-        person, clothes_i = home_pg.update()
+        image = cam.get_image()
+        win.blit(image, (0,0))
+        person, clothes_i, screenshot = home_pg.update()
         if person:
-            clothes[clothes_i] = FitClothes.fitclothes(clothes[clothes_i])
+            clothes[clothes_i] = fitClothes(clothes[clothes_i])
             win.blit(clothes[clothes_i], (400,150))
+        if screenshot:
+            saveOutfit(win, NUM_FAVS)
+            NUM_FAVS += 1
     elif cur_mode == Modes.CLOSET:
-        pass
+        closet_pg.update()
     else: # Fav
-        pass
+        fav_pg.update()
 
     # update button display
     if cur_mode != Modes.FAV:
