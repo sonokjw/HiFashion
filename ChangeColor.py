@@ -8,10 +8,10 @@ return: a 2-d tuple of (luminance, (kr,kg,kb))
 '''
 def lumiChromi(pixel):
     s_lumi = sum(pixel)
-    lumi = sum(pixel) // 3
+    lumi = sum(pixel) / 3
     if s_lumi == 0:
         s_lumi = 1
-    chromi = (pixel[0]//s_lumi, pixel[1]//s_lumi, pixel[2]//s_lumi)
+    chromi = (pixel[0]/s_lumi, pixel[1]/s_lumi, pixel[2]/s_lumi)
     return lumi, chromi
 
 '''
@@ -31,6 +31,7 @@ def change_color(cloth, new_color):
             if a != 0:
                 lumi, _ = lumiChromi((r,g,b))
                 new_pix = (lumi * new_chromi[0], lumi * new_chromi[1], lumi * new_chromi[2], a)
+                print("new value: ", new_pix, "new chromi: ", new_chromi)
                 ret_surface.set_at((w, h), new_pix)
     return ret_surface
 

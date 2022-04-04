@@ -131,7 +131,8 @@ win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 pygame.display.set_caption("HiFashion")
 
 # TODO: Kinect Camera
-cam = pygame.camera.Camera("FaceTime HD Camera (Built-in)", (CAM_WIDTH, CAM_HEIGHT))
+user_cam = pygame.camera.list_cameras()[0]
+cam = pygame.camera.Camera(user_cam, (CAM_WIDTH, CAM_HEIGHT))
 cam.start()
 cam.set_controls(hflip = True, vflip = False)
 
@@ -184,6 +185,7 @@ while not ended:
                 if clothes_i not in new_clothes:
                     new_clothes[clothes_i] = []
                     for color in MORANDI:
+                        print("Morandi color: ", color)
                         new_clothes[clothes_i].append(change_color(cloth, color))
                 cloth = new_clothes[clothes_i][ind]
             clothes[clothes_i] = fitClothes(cloth)
