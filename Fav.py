@@ -16,21 +16,35 @@ class Fav:
         self.rows = 2
         self.height = 250
         self.outfits = []
+        self.pressing = False
+        self.cur_key = None
 
         self.compute_format()
     
     def to_fav(self):
-        self.win.fill(MUTED_WHITE) # muted white
-        label = self.font.render("Saved Outfits", 1, MUTED_BLACK)
-        self.win.blit(label, LABEL_LOC)
-        
         self.get_page(self.page)
 
     '''
     Detection of commands of going to different pages
     '''
     def update(self):
-        pass
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT]: # next page
+            if not self.pressing:
+                self.pressing = True
+                self.cur_key = 'right'
+        elif keys[pygame.K_LEFT]: # next page
+            if not self.pressing:
+                self.pressing = True
+                self.cur_key = 'left'
+        elif self.pressing: # key relased
+            self.pressing = False
+            if self.cur_key == 'right':
+                self.get_page(self.page + 1)
+                print('next page')
+            elif self.cur_key == 'left':
+                self.get_page(self.page - 1)
+                print('previous page')
         
     
     '''
@@ -58,11 +72,16 @@ class Fav:
     display saved outfits at given page
     '''
     def get_page(self, page):
-        if len(self.outfits) < page * self.rows * self.img_per_row:
+        if len(self.outfits) < page * self.rows * self.img_per_row or page < 0:
             return
-
+        
+        self.win.fill(MUTED_WHITE) # muted white
+        label = self.font.render("Saved Outfits", 1, MUTED_BLACK)
+        self.win.blit(label, LABEL_LOC)
+        
         self.page = page
-        start_i = self.page * self.img_per_row
+
+        start_i = self.page * self.img_per_row * self.rows
         i = 0
         x = 50
         y = 150

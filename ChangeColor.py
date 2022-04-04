@@ -31,7 +31,7 @@ def change_color(cloth, new_color):
             if a != 0:
                 lumi, _ = lumiChromi((r,g,b))
                 new_pix = (lumi * new_chromi[0], lumi * new_chromi[1], lumi * new_chromi[2], a)
-                print("new value: ", new_pix, "new chromi: ", new_chromi)
+                # print("new value: ", new_pix, "new chromi: ", new_chromi)
                 ret_surface.set_at((w, h), new_pix)
     return ret_surface
 
