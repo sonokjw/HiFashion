@@ -24,23 +24,18 @@ class Fav:
         label = self.font.render("Saved Outfits", 1, MUTED_BLACK)
         self.win.blit(label, LABEL_LOC)
         
-        start_i = self.page * self.img_per_row
-        i = 0
-        x = 50
-        y = 150
-        while start_i + i < len(self.outfits) and i < self.rows * self.img_per_row:
-            loc = (x, i // self.img_per_row * (self.height + 25) + y)
-            self.win.blit(self.outfits[start_i + i], loc)
-            x += self.outfits[start_i + i].get_width() + 25
-            i += 1
-            if i == self.img_per_row:
-                x = 50
+        self.get_page(self.page)
 
-
+    '''
+    Detection of commands of going to different pages
+    '''
     def update(self):
         pass
         
     
+    '''
+    Initialization of previous saved outfits and class variables
+    '''
     def compute_format(self):
         w, h = self.win.get_width(), self.win.get_height()
         # Load Saved Outfits
@@ -59,6 +54,25 @@ class Fav:
         if j > 0:
             self.height = self.outfits[0].get_height()
 
+    '''
+    display saved outfits at given page
+    '''
+    def get_page(self, page):
+        if len(self.outfits) < page * self.rows * self.img_per_row:
+            return
+
+        self.page = page
+        start_i = self.page * self.img_per_row
+        i = 0
+        x = 50
+        y = 150
+        while start_i + i < len(self.outfits) and i < self.rows * self.img_per_row:
+            loc = (x, i // self.img_per_row * (self.height + 25) + y)
+            self.win.blit(self.outfits[start_i + i], loc)
+            x += self.outfits[start_i + i].get_width() + 25
+            i += 1
+            if i == self.img_per_row:
+                x = 50
 
     '''
     Save the current screenshot to saved outfits, located in /favs
@@ -70,4 +84,6 @@ class Fav:
         dim = (OUTFIT_WIDTH, int(float(img.get_height())/img.get_width()*OUTFIT_WIDTH))
         img = pygame.transform.scale(img, dim)
         self.outfits.append(img)
+        if len(self.outfits) == 1:
+            self.height = self.outfits[0].get_height()
         print("Outfit Saved!")
