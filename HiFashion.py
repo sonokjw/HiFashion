@@ -5,7 +5,6 @@ import sys
 import enum
 
 from FitClothes import fitClothes
-from Home import saveOutfit
 from ChangeColor import *
 
 from Home import Home
@@ -22,7 +21,6 @@ CAM_WIDTH = WIN_WIDTH * 3 //4
 CAM_SIZE = (CAM_WIDTH, CAM_HEIGHT)
 
 IMAGE_WIDTH = 350
-OUTFIT_WIDTH = 200
 ICON_SIZE = (75, 75)
 
 # Morandi color coding
@@ -59,21 +57,9 @@ while True:
         break
     i += 1
 
-# Load Saved Outfits
-favs = []
-j = 0
-while True:
-    try:
-        img = pygame.image.load(f'favs/{j}.png')
-        dim = (OUTFIT_WIDTH, int(float(img.get_height())/img.get_width()*OUTFIT_WIDTH))
-        c = pygame.transform.scale(img, dim)
-        favs.append(c)
-    except:
-        break
-    j += 1
+
 
 NUM_CLOTHES = i
-NUM_FAVS = j
 NUM_COLOR = 1
 
 # in case we want another number of clothes
@@ -153,7 +139,7 @@ fav_btn = Button([fav_icon, fav_icon_hover], (25, WIN_HEIGHT-100), Modes.FAV)
 # App pages Setup
 home_pg = Home(NUM_CLOTHES)
 closet_pg = Closet(win, clothes, font)
-fav_pg = Fav(win, favs, font)
+fav_pg = Fav(win, font)
 
 new_clothes = {} # a dictionary saving new clothing colors based on color scheme
 
@@ -185,12 +171,12 @@ while not ended:
                     new_clothes[clothes_i] = []
                     for color in MORANDI:
                         new_clothes[clothes_i].append(change_color(cloth, color))
-                cloth = new_clothes[clothes_i][ind]
+                if ind != 0:
+                    cloth = new_clothes[clothes_i][ind]
             clothes[clothes_i] = fitClothes(cloth)
             win.blit(cloth, (400,150))
         if screenshot:
-            saveOutfit(win, NUM_FAVS)
-            NUM_FAVS += 1
+            fav_pg.saveOutfit(image)
     elif cur_mode == Modes.CLOSET:
         closet_pg.update()
     else: # Fav

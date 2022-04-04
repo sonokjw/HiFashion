@@ -49,13 +49,3 @@ class Home:
                 screenshot = True
         
         return self.person, self.clothes_i, screenshot
-
-'''
-Save the current screenshot to saved outfits, located in /favs
-in files
-img screenshot to be saved
-num outfit number
-'''
-def saveOutfit(img, num):
-    pygame.image.save(img, f'favs/{num}.png')
-    print("Outfit Saved!")
