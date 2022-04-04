@@ -1,13 +1,12 @@
 import pygame
 import pygame.camera
 import pygame.image
-from pygame.locals import *
 import sys
 import enum
 
 from FitClothes import fitClothes
 from Home import saveOutfit
-import ChangeColor
+from ChangeColor import *
 
 from Home import Home
 from Fav import Fav
@@ -16,12 +15,24 @@ from Closet import Closet
 # defining constants
 WIN_HEIGHT = 700
 WIN_WIDTH = 1200
+WIN_SIZE = (WIN_WIDTH, WIN_HEIGHT)
 
 CAM_HEIGHT = WIN_HEIGHT * 3//4
 CAM_WIDTH = WIN_WIDTH * 3 //4
+CAM_SIZE = (CAM_WIDTH, CAM_HEIGHT)
 
-IMAGE_SIZE = (350, 350)
+IMAGE_WIDTH = 350
+OUTFIT_WIDTH = 200
 ICON_SIZE = (75, 75)
+
+# Morandi color coding
+RED_VINE = (186, 73, 76)
+MATCHA = (199, 199, 187)
+AQUA = (95, 120, 128)
+SUN_KISSED = (20, 38, 48)
+MORANDI = [RED_VINE, MATCHA, AQUA, SUN_KISSED]
+MUTED_WHITE = (249, 245, 236)
+MUTED_BLACK = (18,18,18)
 
 DARKEN = 30 # how much to darken the button when hovering
 
@@ -40,7 +51,9 @@ clothes = []
 i = 0
 while True:
     try:
-        c = pygame.transform.scale(pygame.image.load(f'clothes/{i}.png'), IMAGE_SIZE)
+        img = pygame.image.load(f'clothes/{i}.png')
+        dim = (IMAGE_WIDTH, int(float(img.get_height())/img.get_width()*IMAGE_WIDTH))
+        c = pygame.transform.scale(img, dim)
         clothes.append(c)
     except:
         break
@@ -51,7 +64,9 @@ favs = []
 j = 0
 while True:
     try:
-        c = pygame.transform.scale(pygame.image.load(f'favs/{j}.png'), IMAGE_SIZE)
+        img = pygame.image.load(f'favs/{j}.png')
+        dim = (OUTFIT_WIDTH, int(float(img.get_height())/img.get_width()*OUTFIT_WIDTH))
+        c = pygame.transform.scale(img, dim)
         favs.append(c)
     except:
         break
@@ -89,19 +104,23 @@ class Button:
         global cur_mode
         if cur_mode == self.mode:
             cur_mode = Modes.HOME
-        else:
-            cur_mode = self.mode
+            print("Current mode:", cur_mode)
+            return False
+        
+        cur_mode = self.mode
         print("Current mode:", cur_mode)
+        return True
 
     def on_click(self, event):
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
-                    self.change_mode()
+                    return self.change_mode()
             self.hovering = True
         else:
             self.hovering = False
+        return False
 
 
 # App Display Setup
@@ -115,6 +134,9 @@ pygame.display.set_caption("HiFashion")
 cam = pygame.camera.Camera("FaceTime HD Camera (Built-in)", (CAM_WIDTH, CAM_HEIGHT))
 cam.start()
 cam.set_controls(hflip = True, vflip = False)
+
+# Text Setup
+font = pygame.font.SysFont("helvetica", 48)
 
 # Button Setup
 closet_icon = pygame.transform.scale(pygame.image.load("icons/closet.png"), ICON_SIZE)
@@ -130,8 +152,10 @@ fav_btn = Button([fav_icon, fav_icon_hover], (25, WIN_HEIGHT-100), Modes.FAV)
 
 # App pages Setup
 home_pg = Home(NUM_CLOTHES)
-closet_pg = Closet(win)
-fav_pg = Fav(win)
+closet_pg = Closet(win, clothes, font)
+fav_pg = Fav(win, favs, font)
+
+new_clothes = {} # a dictionary saving new clothing colors based on color scheme
 
 ########### App Loop ###########
 while not ended:
@@ -140,9 +164,13 @@ while not ended:
         if event.type ==  pygame.QUIT:
             ended = True
         if cur_mode != Modes.FAV:
-            closet_btn.on_click(event)
+            change = closet_btn.on_click(event)
+            if change:
+                closet_pg.to_closet()
         if cur_mode != Modes.CLOSET:
-            fav_btn.on_click(event)
+            change = fav_btn.on_click(event)
+            if change:
+                fav_pg.to_fav()
     
     # update current page
     if cur_mode == Modes.HOME:
@@ -150,8 +178,16 @@ while not ended:
         win.blit(image, (0,0))
         person, clothes_i, screenshot = home_pg.update()
         if person:
-            clothes[clothes_i] = fitClothes(clothes[clothes_i])
-            win.blit(clothes[clothes_i], (400,150))
+            cloth = clothes[clothes_i]
+            if home_pg.color % (len(MORANDI) + 1) != 0: # changed color
+                ind = home_pg.color % (len(MORANDI) + 1) - 1
+                if clothes_i not in new_clothes:
+                    new_clothes[clothes_i] = []
+                    for color in MORANDI:
+                        new_clothes[clothes_i].append(change_color(cloth, color))
+                cloth = new_clothes[clothes_i][ind]
+            clothes[clothes_i] = fitClothes(cloth)
+            win.blit(cloth, (400,150))
         if screenshot:
             saveOutfit(win, NUM_FAVS)
             NUM_FAVS += 1
