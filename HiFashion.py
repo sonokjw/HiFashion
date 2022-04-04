@@ -166,15 +166,14 @@ while not ended:
         person, clothes_i, screenshot = home_pg.update()
         if person:
             cloth = clothes[clothes_i]
-            if home_pg.color % (len(MORANDI) + 1) != 0: # changed color
-                ind = home_pg.color % (len(MORANDI) + 1) - 1
-                if clothes_i not in new_clothes:
-                    new_clothes[clothes_i] = []
-                    for color in MORANDI:
-                        print("Morandi color: ", color)
-                        new_clothes[clothes_i].append(change_color(cloth, color))
-                if ind != 0:
-                    cloth = new_clothes[clothes_i][ind]
+            # change color
+            ind = home_pg.color % (len(MORANDI) + 1)
+            if clothes_i not in new_clothes:
+                new_clothes[clothes_i] = [cloth]
+                for color in MORANDI:
+                    print("Morandi color: ", color)
+                    new_clothes[clothes_i].append(change_color(cloth, color))
+            cloth = new_clothes[clothes_i][ind]
             clothes[clothes_i] = fitClothes(cloth)
             win.blit(cloth, (400,150))
         if screenshot:
