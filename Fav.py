@@ -100,6 +100,7 @@ class Fav:
     '''
     def saveOutfit(self, img):
         pygame.image.save(img, f'favs/{len(self.outfits)}.png')
+        # img = pygame.image.load(f'favs/{len(self.outfits)-1}.png')
         dim = (OUTFIT_WIDTH, int(float(img.get_height())/img.get_width()*OUTFIT_WIDTH))
         img = pygame.transform.scale(img, dim)
         self.outfits.append(img)

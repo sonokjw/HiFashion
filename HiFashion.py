@@ -171,13 +171,13 @@ while not ended:
             if clothes_i not in new_clothes:
                 new_clothes[clothes_i] = [cloth]
                 for color in MORANDI:
-                    print("Morandi color: ", color)
+                    # print("Morandi color: ", color)
                     new_clothes[clothes_i].append(change_color(cloth, color))
             cloth = new_clothes[clothes_i][ind]
             clothes[clothes_i] = fitClothes(cloth)
             win.blit(cloth, (400,150))
         if screenshot:
-            fav_pg.saveOutfit(image)
+            fav_pg.saveOutfit(win)
     elif cur_mode == Modes.CLOSET:
         closet_pg.update()
     else: # Fav
