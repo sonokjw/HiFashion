@@ -10,6 +10,7 @@ from ChangeColor import *
 from Home import Home
 from Fav import Fav
 from Closet import Closet
+from Body import Body
 
 # defining constants
 WIN_HEIGHT = 700
@@ -57,10 +58,10 @@ while True:
         break
     i += 1
 
-
-
 NUM_CLOTHES = i
 NUM_COLOR = 1
+
+new_clothes = {} # a dictionary saving new clothing colors based on color scheme
 
 # in case we want another number of clothes
 if len(sys.argv) > 1:
@@ -142,7 +143,9 @@ home_pg = Home(NUM_CLOTHES)
 closet_pg = Closet(win, clothes, font)
 fav_pg = Fav(win, font)
 
-new_clothes = {} # a dictionary saving new clothing colors based on color scheme
+# Body tracking setup
+body = Body()
+cur_time = pygame.time.get_ticks()
 
 ########### App Loop ###########
 while not ended:
@@ -164,6 +167,11 @@ while not ended:
         image = cam.get_image()
         win.blit(image, (0,0))
         person, clothes_i, screenshot = home_pg.update()
+
+        if pygame.time.get_ticks() - cur_time >= 2000:
+            body.track(image)
+            cur_time = pygame.time.get_ticks()
+
         if person:
             cloth = clothes[clothes_i]
             # change color
