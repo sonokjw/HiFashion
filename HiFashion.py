@@ -144,7 +144,7 @@ closet_pg = Closet(win, clothes, font)
 fav_pg = Fav(win, font)
 
 # Body tracking setup
-body = Body()
+body = Body(WIN_WIDTH, WIN_HEIGHT)
 cur_time = pygame.time.get_ticks()
 
 ########### App Loop ###########
@@ -166,7 +166,7 @@ while not ended:
     if cur_mode == Modes.HOME:
         image = cam.get_image()
         win.blit(image, (0,0))
-        person, clothes_i, screenshot = home_pg.update()
+        person, clothes_i, screenshot, tracking = home_pg.update()
 
         if pygame.time.get_ticks() - cur_time >= 2000:
             body.track(image)
@@ -186,6 +186,8 @@ while not ended:
             win.blit(cloth, (400,150))
         if screenshot:
             fav_pg.saveOutfit(win)
+        if tracking:
+            body.draw(win)
     elif cur_mode == Modes.CLOSET:
         closet_pg.update()
     else: # Fav

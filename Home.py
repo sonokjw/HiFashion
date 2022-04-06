@@ -12,6 +12,7 @@ class Home:
         self.cur_key = None
         self.clothes_i = 0 # i of clothes being displayed
         self.num_clothes = num_clothes
+        self.tracking = False
 
     # detect key press
     def update(self):
@@ -29,10 +30,14 @@ class Home:
             if not self.pressing:
                 self.pressing = True
                 self.cur_key = 'up'
-        elif keys[pygame.K_p]: # screenshot
+        elif keys[pygame.K_p]: # take a picture
             if not self.pressing:
                 self.pressing = True
                 self.cur_key = 'p'
+        elif keys[pygame.K_t]: # show tracking segments
+            if not self.pressing:
+                self.pressing = True
+                self.cur_key = 't'
         elif self.pressing: # key relased
             self.pressing = False
             if self.cur_key == 'c':
@@ -47,5 +52,7 @@ class Home:
                 print('next color')
             elif self.cur_key == 'p':
                 screenshot = True
+            elif self.cur_key == 't':
+                self.tracking = not self.tracking
         
-        return self.person, self.clothes_i, screenshot
+        return self.person, self.clothes_i, screenshot, self.tracking
