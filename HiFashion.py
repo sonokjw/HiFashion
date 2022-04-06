@@ -2,9 +2,9 @@ import pygame
 import pygame.camera
 import pygame.image
 import sys
-import enum
 
-from FitClothes import fitClothes
+from FitClothes import fitClothes, fitCoords
+from Constant import *
 from ChangeColor import *
 
 from Home import Home
@@ -12,34 +12,6 @@ from Fav import Fav
 from Closet import Closet
 from Body import Body
 
-# defining constants
-WIN_HEIGHT = 700
-WIN_WIDTH = 1200
-WIN_SIZE = (WIN_WIDTH, WIN_HEIGHT)
-
-CAM_HEIGHT = WIN_HEIGHT * 3//4
-CAM_WIDTH = WIN_WIDTH * 3 //4
-CAM_SIZE = (CAM_WIDTH, CAM_HEIGHT)
-
-IMAGE_WIDTH = 350
-ICON_SIZE = (75, 75)
-
-# Morandi color coding
-RED_VINE = (186, 73, 76)
-MATCHA = (199, 199, 187)
-AQUA = (95, 120, 128)
-SUN_KISSED = (20, 38, 48)
-MORANDI = [RED_VINE, MATCHA, AQUA, SUN_KISSED]
-MUTED_WHITE = (249, 245, 236)
-MUTED_BLACK = (18,18,18)
-
-DARKEN = 30 # how much to darken the button when hovering
-
-# all possible pages of apps
-class Modes(enum.Enum):
-    HOME = 1
-    CLOSET = 2
-    FAV = 3
 
 cur_mode = Modes.HOME # current screen of app
 ended = False # whether app exited
@@ -182,8 +154,10 @@ while not ended:
                     # print("Morandi color: ", color)
                     new_clothes[clothes_i].append(change_color(cloth, color))
             cloth = new_clothes[clothes_i][ind]
-            clothes[clothes_i] = fitClothes(cloth)
-            win.blit(cloth, (400,150))
+            cloth = fitClothes(cloth, body.locations, ClothType.UPPER)
+            coord = fitCoords(body.locations, ClothType.UPPER)
+            print("clothes at coord: ", coord)
+            win.blit(cloth, coord)
         if screenshot:
             fav_pg.saveOutfit(win)
         if tracking:

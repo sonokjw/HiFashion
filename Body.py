@@ -23,6 +23,11 @@ class Body:
         self.locations = [None]*4
         self.screen_dim = (win_w, win_h)
 
+    '''
+    Detect basic skeletons
+
+    return: List, location following the order [left shoulder, right shoulder, left hip, right hip]
+    '''
     def track(self, img):
         self.locations = [(-1, -1)]*4
 
