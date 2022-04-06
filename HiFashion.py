@@ -143,7 +143,7 @@ home_pg = Home(NUM_CLOTHES)
 closet_pg = Closet(win, clothes, font)
 fav_pg = Fav(win, font)
 
-# Body tracking setup
+# Tracking tools setup
 body = Body(WIN_WIDTH, WIN_HEIGHT)
 cur_time = pygame.time.get_ticks()
 

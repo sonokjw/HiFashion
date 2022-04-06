@@ -4,6 +4,10 @@ import pygame.image
 import pygame.draw
 import numpy as np
 
+'''
+Tracks the body of the user, if in sight
+'''
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
