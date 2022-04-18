@@ -11,6 +11,9 @@ from Home import Home
 from Fav import Fav
 from Closet import Closet
 from Body import Body
+from Speech import get_text
+
+from threading import Thread
 
 
 cur_mode = Modes.HOME # current screen of app
@@ -140,8 +143,12 @@ while not ended:
         win.blit(image, (0,0))
         person, clothes_i, screenshot, tracking = home_pg.update()
 
-        if pygame.time.get_ticks() - cur_time >= 2000:
-            body.track(image)
+        # if pygame.time.get_ticks() - cur_time >= 2000:
+        #     body.track(image)
+        #     cur_time = pygame.time.get_ticks()
+
+        if pygame.time.get_ticks() - cur_time >= 1500:
+            Thread(target=get_text, args=()).start()
             cur_time = pygame.time.get_ticks()
 
         if person:
