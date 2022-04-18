@@ -1,3 +1,5 @@
 mediapipe
 pygame
+SpeechRecognition
+PyAudio
 numpy
