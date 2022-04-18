@@ -156,7 +156,7 @@ while not ended:
             cloth = new_clothes[clothes_i][ind]
             cloth = fitClothes(cloth, body.locations, ClothType.UPPER)
             coord = fitCoords(body.locations, ClothType.UPPER)
-            print("clothes at coord: ", coord)
+            # print("clothes at coord: ", coord)
             win.blit(cloth, coord)
         if screenshot:
             fav_pg.saveOutfit(win)

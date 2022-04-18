@@ -14,7 +14,7 @@ resize the given cloth based on distance
 of user from the screen
 '''
 
-def fitClothes(cloth, location, cloth_type, margin = 0.8):
+def fitClothes(cloth, location, cloth_type, margin = 1.5):
     w = cloth.get_width()
     h = cloth.get_height()
     
@@ -39,7 +39,7 @@ def fitClothes(cloth, location, cloth_type, margin = 0.8):
 '''
 fit the cloth coordinate based on body tracking
 '''
-def fitCoords (location, cloth_type, margin_w = 0.35, margin_h = 0.25):
+def fitCoords (location, cloth_type, margin_w = 0.65, margin_h = 0.25):
     offset = [40, 100]
 
     if cloth_type == ClothType.UPPER:
