@@ -6,7 +6,7 @@ fitting onto them
 
 class Home:
     def __init__(self, num_clothes):
-        self.person = False
+        self.person = False # fit clothes to user
         self.pressing = False
         self.color = 0
         self.cur_key = None
@@ -14,8 +14,12 @@ class Home:
         self.num_clothes = num_clothes
         self.tracking = False
 
-    # detect key press
-    def update(self):
+    '''
+    Detect key press and voice commands.
+    text: transcription of what the user says
+    '''
+    def update(self, text):
+        fit = False
         screenshot = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_c]: # show clothes
@@ -55,4 +59,16 @@ class Home:
             elif self.cur_key == 't':
                 self.tracking = not self.tracking
         
-        return self.person, self.clothes_i, screenshot, self.tracking
+        # voice commands detection
+        if text == 'fit':
+            print('Fitting')
+            fit = True
+        elif text == 'next' and self.person:
+            self.clothes_i = (self.clothes_i+1) % self.num_clothes
+            self.color = 0
+        elif text == 'change color' and self.person:
+            self.color += 1
+        elif text == 'picture':
+            screenshot = True
+        
+        return self.person, self.clothes_i, self.color, screenshot, self.tracking, fit

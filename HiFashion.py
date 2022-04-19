@@ -11,7 +11,7 @@ from Home import Home
 from Fav import Fav
 from Closet import Closet
 from Body import Body
-from Speech import get_text
+from Speech import Speech
 
 from threading import Thread
 import threading
@@ -93,7 +93,7 @@ pygame.camera.init()
 win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 pygame.display.set_caption("HiFashion")
 
-# TODO: Kinect Camera
+# Webcam Setup
 user_cam = pygame.camera.list_cameras()[0]
 cam = pygame.camera.Camera(user_cam, (CAM_WIDTH, CAM_HEIGHT))
 cam.start()
@@ -121,7 +121,9 @@ fav_pg = Fav(win, font)
 
 # Tracking tools setup
 body = Body(WIN_WIDTH, WIN_HEIGHT)
+speech = Speech()
 cur_time = pygame.time.get_ticks()
+cur_fit = None
 
 ########### App Loop ###########
 while not ended:
@@ -142,7 +144,7 @@ while not ended:
     if cur_mode == Modes.HOME:
         image = cam.get_image()
         win.blit(image, (0,0))
-        person, clothes_i, screenshot, tracking = home_pg.update()
+        person, clothes_i, color_i, screenshot, tracking, fit = home_pg.update(speech.text)
 
         # if pygame.time.get_ticks() - cur_time >= 2000:
         #     body.track(image)
@@ -150,12 +152,14 @@ while not ended:
 
         # speech detection
         if threading.active_count() <= 1:
-            Thread(target=get_text, args=()).start()
+            Thread(target=speech.get_text, args=()).start()
 
         if person:
+            if fit:
+                body.track(image)
             cloth = clothes[clothes_i]
             # change color
-            ind = home_pg.color % (len(MORANDI) + 1)
+            ind = color_i % (len(MORANDI) + 1)
             if clothes_i not in new_clothes:
                 new_clothes[clothes_i] = [cloth]
                 for color in MORANDI:
@@ -166,8 +170,10 @@ while not ended:
             coord = fitCoords(body.locations, ClothType.UPPER)
             # print("clothes at coord: ", coord)
             win.blit(cloth, coord)
+        # taking a screenshot
         if screenshot:
             fav_pg.saveOutfit(win)
+        # showing tracking skeletons of shoulder and hip
         if tracking:
             body.draw(win)
     elif cur_mode == Modes.CLOSET:

@@ -2,12 +2,19 @@ import speech_recognition as sr
 
 r = sr.Recognizer()
 
-def get_text():
-    with sr.Microphone() as source:
-        audio = r.listen(source)
+class Speech:
+    def __init__(self):
+        self.text = ""
 
-        try:
-            text = r.recognize_google(audio)
-            print("You said: {}".format(text))
-        except:
-            pass
+    def get_text(self):
+        self.text = ""
+        with sr.Microphone() as source:
+            audio = r.listen(source)
+
+            try:
+                text = r.recognize_google(audio)
+                self.text = text
+                print("updated: ",self.text)
+            except:
+                pass
+        
