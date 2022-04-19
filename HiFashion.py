@@ -14,6 +14,7 @@ from Body import Body
 from Speech import get_text
 
 from threading import Thread
+import threading
 
 
 cur_mode = Modes.HOME # current screen of app
@@ -136,7 +137,7 @@ while not ended:
             change = fav_btn.on_click(event)
             if change:
                 fav_pg.to_fav()
-    
+
     # update current page
     if cur_mode == Modes.HOME:
         image = cam.get_image()
@@ -147,9 +148,9 @@ while not ended:
         #     body.track(image)
         #     cur_time = pygame.time.get_ticks()
 
-        if pygame.time.get_ticks() - cur_time >= 1500:
+        # speech detection
+        if threading.active_count() <= 1:
             Thread(target=get_text, args=()).start()
-            cur_time = pygame.time.get_ticks()
 
         if person:
             cloth = clothes[clothes_i]
