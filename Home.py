@@ -1,6 +1,6 @@
 from operator import mod
 import pygame
-import Constant
+from Constant import *
 '''
 Home page: screen showing the user and outfits
 fitting onto them
@@ -22,7 +22,7 @@ class Home:
     '''
     def update(self, text):
         fit = False
-        page = Constant.Modes.HOME
+        page = Modes.HOME
         screenshot = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_c]: # show clothes
@@ -82,8 +82,8 @@ class Home:
         elif text == 'picture':
             screenshot = True
         elif text == 'closet':
-            page = Constant.Modes.CLOSET
+            page = Modes.CLOSET
         elif text == 'my outfits' or text == 'my outfit':
-            page = Constant.Modes.FAV
+            page = Modes.FAV
         
         return self.person, self.clothes_i, self.color, screenshot, self.tracking, fit, page

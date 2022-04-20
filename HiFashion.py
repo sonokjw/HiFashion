@@ -141,15 +141,15 @@ while not ended:
             if change:
                 fav_pg.to_fav()
 
+    # speech detection
+    if threading.active_count() <= 1:
+        Thread(target=speech.get_text, args=()).start()
+
     # update current page
     if cur_mode == Modes.HOME:
         image = cam.get_image()
         win.blit(image, (0,0))
         person, clothes_i, color_i, screenshot, tracking, fit, page = home_pg.update(speech.text)
-
-        # speech detection
-        if threading.active_count() <= 1:
-            Thread(target=speech.get_text, args=()).start()
 
         if person:
             if fit:
@@ -180,9 +180,13 @@ while not ended:
             cur_mode = Modes.FAV
             fav_pg.to_fav()
     elif cur_mode == Modes.CLOSET:
-        closet_pg.update()
+        to_home = closet_pg.update(speech.text)
+        if to_home:
+            cur_mode = Modes.HOME
     else: # Fav
-        fav_pg.update()
+        to_home = fav_pg.update(speech.text)
+        if to_home:
+            cur_mode = Modes.HOME
 
     # update button display
     if cur_mode != Modes.FAV:

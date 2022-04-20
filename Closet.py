@@ -13,7 +13,7 @@ class Closet:
         self.win = win
         self.font = font
         self.page = 0
-        self.rows = 2
+        self.rows = 1
         self.clothes = []
         self.pressing = False
         self.cur_key = None
@@ -23,7 +23,8 @@ class Closet:
     def to_closet(self):
         self.get_page(self.page)
 
-    def update(self):
+    def update(self, text):
+        to_home = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]: # next page
             if not self.pressing:
@@ -42,12 +43,20 @@ class Closet:
                 self.get_page(self.page - 1)
                 print('previous page')
 
+        if text == "back":
+            self.get_page(self.page - 1)
+        elif text == 'next':
+            self.get_page(self.page + 1)
+        elif text == 'home':
+            to_home = True
+        
+        return to_home
 
     '''
     display saved outfits at given page
     '''
     def get_page(self, page):
-        if (len(self.clothes)) < page * self.rows * self.img_per_row or page < 0:
+        if (len(self.clothes)) <= page * self.rows * self.img_per_row or page < 0:
             return
         
         self.win.fill(MUTED_WHITE) # muted white

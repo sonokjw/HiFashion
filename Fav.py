@@ -27,7 +27,8 @@ class Fav:
     '''
     Detection of commands of going to different pages
     '''
-    def update(self):
+    def update(self, text):
+        to_home = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]: # next page
             if not self.pressing:
@@ -45,6 +46,16 @@ class Fav:
             elif self.cur_key == 'left':
                 self.get_page(self.page - 1)
                 print('previous page')
+        
+        
+        if text == "back":
+            self.get_page(self.page - 1)
+        elif text == 'next':
+            self.get_page(self.page + 1)
+        elif text == 'home':
+            to_home = True
+        
+        return to_home
         
     
     '''
@@ -72,7 +83,7 @@ class Fav:
     display saved outfits at given page
     '''
     def get_page(self, page):
-        if len(self.outfits) < page * self.rows * self.img_per_row or page < 0:
+        if len(self.outfits) <= page * self.rows * self.img_per_row or page < 0:
             return
         
         self.win.fill(MUTED_WHITE) # muted white
