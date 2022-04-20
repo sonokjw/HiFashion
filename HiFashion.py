@@ -1,8 +1,7 @@
-from ast import Mod
-from pydoc import pager
 import pygame
 import pygame.camera
 import pygame.image
+import time
 import sys
 
 from FitClothes import fitClothes, fitCoords
@@ -103,6 +102,7 @@ cam.set_controls(hflip = True, vflip = False)
 
 # Text Setup
 font = pygame.font.SysFont("helvetica", 48)
+screenshot_font = pygame.font.SysFont("helvetica", 125)
 
 # Button Setup
 closet_icon = pygame.transform.scale(pygame.image.load("icons/closet.png"), ICON_SIZE)
@@ -169,6 +169,10 @@ while not ended:
         # taking a screenshot
         if screenshot:
             fav_pg.saveOutfit(win)
+            label = screenshot_font.render("OUTFIT SAVED!", 1, MUTED_WHITE)
+            win.blit(label, (100, 200))
+            pygame.display.update()
+            time.sleep(1.5)
         # showing tracking skeletons of shoulder and hip
         if tracking:
             body.draw(win)
