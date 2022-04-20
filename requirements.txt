@@ -3,3 +3,4 @@ pygame
 SpeechRecognition
 PyAudio
 numpy
+threaded

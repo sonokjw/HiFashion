@@ -1,3 +1,5 @@
+from ast import Mod
+from pydoc import pager
 import pygame
 import pygame.camera
 import pygame.image
@@ -123,7 +125,6 @@ fav_pg = Fav(win, font)
 body = Body(WIN_WIDTH, WIN_HEIGHT)
 speech = Speech()
 cur_time = pygame.time.get_ticks()
-cur_fit = None
 
 ########### App Loop ###########
 while not ended:
@@ -144,11 +145,7 @@ while not ended:
     if cur_mode == Modes.HOME:
         image = cam.get_image()
         win.blit(image, (0,0))
-        person, clothes_i, color_i, screenshot, tracking, fit = home_pg.update(speech.text)
-
-        # if pygame.time.get_ticks() - cur_time >= 2000:
-        #     body.track(image)
-        #     cur_time = pygame.time.get_ticks()
+        person, clothes_i, color_i, screenshot, tracking, fit, page = home_pg.update(speech.text)
 
         # speech detection
         if threading.active_count() <= 1:
@@ -163,7 +160,6 @@ while not ended:
             if clothes_i not in new_clothes:
                 new_clothes[clothes_i] = [cloth]
                 for color in MORANDI:
-                    # print("Morandi color: ", color)
                     new_clothes[clothes_i].append(change_color(cloth, color))
             cloth = new_clothes[clothes_i][ind]
             cloth = fitClothes(cloth, body.locations, ClothType.UPPER)
@@ -176,6 +172,13 @@ while not ended:
         # showing tracking skeletons of shoulder and hip
         if tracking:
             body.draw(win)
+        # new page by voice commands
+        if page == Modes.CLOSET:
+            cur_mode = Modes.CLOSET
+            closet_pg.to_closet()
+        elif page == Modes.FAV:
+            cur_mode = Modes.FAV
+            fav_pg.to_fav()
     elif cur_mode == Modes.CLOSET:
         closet_pg.update()
     else: # Fav

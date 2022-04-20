@@ -1,4 +1,6 @@
+from operator import mod
 import pygame
+import Constant
 '''
 Home page: screen showing the user and outfits
 fitting onto them
@@ -20,12 +22,17 @@ class Home:
     '''
     def update(self, text):
         fit = False
+        page = Constant.Modes.HOME
         screenshot = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_c]: # show clothes
             if not self.pressing:
                 self.pressing = True
                 self.cur_key = 'c'
+        if keys[pygame.K_f]: # fit clothes to user once
+            if not self.pressing:
+                self.pressing = True
+                self.cur_key = 'f'
         elif keys[pygame.K_LEFT]: # next clothes
             if not self.pressing:
                 self.pressing = True
@@ -47,6 +54,8 @@ class Home:
             if self.cur_key == 'c':
                 self.person = not self.person
                 print('showing clothes:', self.person)
+            elif self.cur_key == 'f' and self.person:
+                fit = True
             elif self.cur_key == 'left' and self.person:
                 self.clothes_i = (self.clothes_i+1) % self.num_clothes
                 self.color = 0
@@ -61,8 +70,10 @@ class Home:
         
         # voice commands detection
         if text == 'fit':
-            print('Fitting')
             fit = True
+            self.person = True
+        elif text == 'clear':
+            self.person = False
         elif text == 'next' and self.person:
             self.clothes_i = (self.clothes_i+1) % self.num_clothes
             self.color = 0
@@ -70,5 +81,9 @@ class Home:
             self.color += 1
         elif text == 'picture':
             screenshot = True
+        elif text == 'closet':
+            page = Constant.Modes.CLOSET
+        elif text == 'my outfits' or text == 'my outfit':
+            page = Constant.Modes.FAV
         
-        return self.person, self.clothes_i, self.color, screenshot, self.tracking, fit
+        return self.person, self.clothes_i, self.color, screenshot, self.tracking, fit, page
