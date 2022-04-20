@@ -1,6 +1,7 @@
 import pygame
 import pygame.camera
 import pygame.image
+import pygame.mixer
 import time
 import sys
 
@@ -104,6 +105,11 @@ cam.set_controls(hflip = True, vflip = False)
 font = pygame.font.SysFont("helvetica", 48)
 screenshot_font = pygame.font.SysFont("helvetica", 125)
 
+# Audio Setup
+pygame.mixer.init()
+pygame.mixer.music.load("screenshot.wav")
+pygame.mixer.music.set_volume(0.7)
+
 # Button Setup
 closet_icon = pygame.transform.scale(pygame.image.load("icons/closet.png"), ICON_SIZE)
 closet_icon_hover = pygame.transform.scale(pygame.image.load("icons/closet.png"), ICON_SIZE)
@@ -169,6 +175,7 @@ while not ended:
         # taking a screenshot
         if screenshot:
             fav_pg.saveOutfit(win)
+            pygame.mixer.music.play()
             label = screenshot_font.render("OUTFIT SAVED!", 1, MUTED_WHITE)
             win.blit(label, (100, 200))
             pygame.display.update()
