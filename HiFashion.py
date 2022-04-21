@@ -168,8 +168,8 @@ while not ended:
                 for color in MORANDI:
                     new_clothes[clothes_i].append(change_color(cloth, color))
             cloth = new_clothes[clothes_i][ind]
-            cloth = fitClothes(cloth, body.locations, ClothType.UPPER)
-            coord = fitCoords(body.locations, ClothType.UPPER)
+            cloth = fitClothes(cloth, body.locations, cloth_dic[ind]['ctype'], cloth_dic[ind]['margin'])
+            coord = fitCoords(body.locations, cloth_dic[ind]['ctype'], cloth_dic[ind]['margin_w'], cloth_dic[ind]['margin_h'])
             # print("clothes at coord: ", coord)
             win.blit(cloth, coord)
         # taking a screenshot

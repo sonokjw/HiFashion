@@ -69,21 +69,21 @@ class Home:
                 self.tracking = not self.tracking
         
         # voice commands detection
-        if text == 'fit':
+        if 'fit' in text:
             fit = True
             self.person = True
-        elif text == 'clear':
+        elif 'clear' in text:
             self.person = False
-        elif text == 'next' and self.person:
+        elif 'next' in text and self.person:
             self.clothes_i = (self.clothes_i+1) % self.num_clothes
             self.color = 0
-        elif text == 'change color' and self.person:
+        elif 'change color' in text and self.person:
             self.color += 1
-        elif text == 'picture':
+        elif  'picture' in text:
             screenshot = True
-        elif text == 'closet':
+        elif 'closet' in text:
             page = Modes.CLOSET
-        elif text == 'my outfits' or text == 'my outfit':
+        elif 'my outfits' in text or 'my outfit' in text:
             page = Modes.FAV
         
         return self.person, self.clothes_i, self.color, screenshot, self.tracking, fit, page
