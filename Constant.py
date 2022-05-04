@@ -1,5 +1,6 @@
 import enum
 import csv
+import pygame
 
 # defining constants
 WIN_HEIGHT = 700
@@ -55,5 +56,40 @@ for row in csvreader:
             elif 'Bottom' in row[i]:
                 cloth_dic[ind][metric] = ClothType.LOWER
 
-print(cloth_dic)
-        
+'''
+images: [icon, icon_hover] a list of two icon images
+position: (x, y) coordinates of top-left of button
+mode: Modes mode to be changed when this button is clicked
+'''
+class Button:
+    def __init__(self, images, position, mode):
+        self.images = images
+        self.mode = mode
+        self.pos = position
+        self.rect = images[0].get_rect(topleft=position)
+        self.hovering = False
+    
+    def show(self, win):
+        if self.hovering:
+            win.blit(self.images[1], self.pos)
+        else:
+            win.blit(self.images[0], self.pos)
+ 
+    def change_mode(self, cur_mode):
+        if cur_mode == self.mode:
+            print("Current mode:", cur_mode)
+            return Modes.HOME, False
+
+        print("Current mode:", cur_mode)
+        return self.mode, True
+
+    def on_click(self, event, cur_mode):
+        x, y = pygame.mouse.get_pos()
+        if self.rect.collidepoint(x, y):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    return self.change_mode(cur_mode=cur_mode)
+            self.hovering = True
+        else:
+            self.hovering = False
+        return None, False

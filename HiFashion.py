@@ -45,49 +45,6 @@ new_clothes = {} # a dictionary saving new clothing colors based on color scheme
 if len(sys.argv) > 1:
     NUM_CLOTHES = min(NUM_CLOTHES, int(sys.argv[1]))
 
-'''
-images: [icon, icon_hover] a list of two icon images
-position: (x, y) coordinates of top-left of button
-mode: Modes mode to be changed when this button is clicked
-'''
-class Button:
-    def __init__(self, images, position, mode):
-        self.images = images
-        self.mode = mode
-        self.pos = position
-        self.rect = images[0].get_rect(topleft=position)
-        self.hovering = False
-    
-    def show(self):
-        global win
-        if self.hovering:
-            win.blit(self.images[1], self.pos)
-        else:
-            win.blit(self.images[0], self.pos)
- 
-    def change_mode(self):
-        global cur_mode
-        if cur_mode == self.mode:
-            cur_mode = Modes.HOME
-            print("Current mode:", cur_mode)
-            return False
-        
-        cur_mode = self.mode
-        print("Current mode:", cur_mode)
-        return True
-
-    def on_click(self, event):
-        x, y = pygame.mouse.get_pos()
-        if self.rect.collidepoint(x, y):
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.mouse.get_pressed()[0]:
-                    return self.change_mode()
-            self.hovering = True
-        else:
-            self.hovering = False
-        return False
-
-
 # App Display Setup
 pygame.init()
 pygame.camera.init()
@@ -139,13 +96,17 @@ while not ended:
         if event.type ==  pygame.QUIT:
             ended = True
         if cur_mode != Modes.FAV:
-            change = closet_btn.on_click(event)
-            if change:
-                closet_pg.to_closet()
+            new_mode, change = closet_btn.on_click(event, cur_mode)
+            if new_mode is not None:
+                cur_mode = new_mode
+                if change:
+                    closet_pg.to_closet()
         if cur_mode != Modes.CLOSET:
-            change = fav_btn.on_click(event)
-            if change:
-                fav_pg.to_fav()
+            new_mode, change = fav_btn.on_click(event, cur_mode)
+            if new_mode is not None:
+                cur_mode = new_mode
+                if change:
+                    fav_pg.to_fav()
 
     # speech detection
     if threading.active_count() <= 1:
@@ -201,9 +162,9 @@ while not ended:
 
     # update button display
     if cur_mode != Modes.FAV:
-        closet_btn.show()
+        closet_btn.show(win=win)
     if cur_mode != Modes.CLOSET:
-        fav_btn.show()
+        fav_btn.show(win=win)
     
     pygame.display.update()
         
