@@ -99,7 +99,7 @@ class Button:
 
 
 '''
-cloth: the selected cloth image
+cloth: the selected cloth image [front, back]
 ind: the index of the cloth in cloth_dic
 position: (x, y) coordinates of top-left of button
 selected: if the cloth is slescted
@@ -110,11 +110,29 @@ class Hanger:
         self.selected = False
         self.cloth = cloth
         self.ind = ind
-        self.rect = cloth.get_rect(topleft=position)
+        self.prev = 0 
+        self.hovering = 0
+        self.rect = cloth[self.hovering].get_rect(topleft=position)
 
     def show(self, win):
-        if self.selected:
-            win.blit(self.cloth, self.pos)
+        win.blit(self.cloth[self.hovering], self.pos)
+
+    def on_click(self, event):
+        x, y = pygame.mouse.get_pos()
+        if self.rect.collidepoint(x, y):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    width = self.cloth.get_width()
+                    height = self.cloth.get_height()
+                    pygame.draw.rect(self.cloth, AQUA, [0, 0, width, height], 1)
+                    self.selected = not self.selected
+            self.prev = self.hovering
+            self.hovering = 1
+        else:
+            self.prev = self.hovering
+            self.hovering = 0
+        return self.prev == self.hovering
+
     
 
 '''
@@ -141,7 +159,7 @@ def load_clothes():
     # load clothes back images if exists
     for j in range(i):
         try:
-            img = pygame.image.load(f'clothes/{i}b.png')
+            img = pygame.image.load(f'clothes/{j}b.png')
             dim = (IMAGE_WIDTH, int(float(img.get_height())/img.get_width()*IMAGE_WIDTH))
             c = pygame.transform.scale(img, dim)
             clothes[i].append(c)
