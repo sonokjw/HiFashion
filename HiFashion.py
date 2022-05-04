@@ -24,6 +24,8 @@ ended = False # whether app exited
 
 # Load Clothes
 # transparent clothes: https://www.transparentpng.com/cats/shirt-1436.html
+clothes_dict = load_clothes()
+
 clothes = []
 i = 0
 while True:

@@ -1,4 +1,5 @@
 import pygame
+from Constant import Hanger
 '''
 Available clothes display page
 '''
@@ -17,6 +18,9 @@ class Closet:
         self.clothes = []
         self.pressing = False
         self.cur_key = None
+
+        self.clothes_dict = {} # ind of cloth to hanger
+        self.selected = [] # inds of selected clothes
 
         self.organizeClothes(clothes)
     

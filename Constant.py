@@ -1,6 +1,9 @@
 import enum
 import csv
 import pygame
+'''
+All the constants, helpful functions or classes here
+'''
 
 # defining constants
 WIN_HEIGHT = 700
@@ -93,3 +96,41 @@ class Button:
         else:
             self.hovering = False
         return None, False
+
+
+class Hanger:
+    def __init__(self):
+        pass
+
+'''
+Load clothes from the clothes directory
+return: dict 
+            key: clothes index
+            val: [front, back(optional)]
+'''
+def load_clothes():
+    clothes = {}
+    i = 0
+
+    # load clothes front images
+    while True:
+        try:
+            img = pygame.image.load(f'clothes/{i}.png')
+            dim = (IMAGE_WIDTH, int(float(img.get_height())/img.get_width()*IMAGE_WIDTH))
+            c = pygame.transform.scale(img, dim)
+            clothes[i] = [c]
+        except:
+            break
+        i += 1
+    
+    # load clothes back images if exists
+    for j in range(i):
+        try:
+            img = pygame.image.load(f'clothes/{i}b.png')
+            dim = (IMAGE_WIDTH, int(float(img.get_height())/img.get_width()*IMAGE_WIDTH))
+            c = pygame.transform.scale(img, dim)
+            clothes[i].append(c)
+        except:
+            pass
+    
+    return clothes
