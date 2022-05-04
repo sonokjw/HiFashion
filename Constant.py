@@ -98,9 +98,24 @@ class Button:
         return None, False
 
 
+'''
+cloth: the selected cloth image
+ind: the index of the cloth in cloth_dic
+position: (x, y) coordinates of top-left of button
+selected: if the cloth is slescted
+'''
 class Hanger:
-    def __init__(self):
-        pass
+    def __init___(self, position, cloth, ind):
+        self.pos = position
+        self.selected = False
+        self.cloth = cloth
+        self.ind = ind
+        self.rect = cloth.get_rect(topleft=position)
+
+    def show(self, win):
+        if self.selected:
+            win.blit(self.cloth, self.pos)
+    
 
 '''
 Load clothes from the clothes directory
