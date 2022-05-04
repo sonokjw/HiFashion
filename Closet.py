@@ -43,11 +43,12 @@ class Closet:
                 self.get_page(self.page - 1)
                 print('previous page')
 
-        if text == "back":
+        txt_ls = text.split(" ")
+        if "back" in txt_ls:
             self.get_page(self.page - 1)
-        elif text == 'next':
+        elif 'next' in txt_ls:
             self.get_page(self.page + 1)
-        elif text == 'home':
+        elif 'home' in txt_ls or 'homepage' in txt_ls:
             to_home = True
         
         return to_home

@@ -43,15 +43,17 @@ csvreader = csv.reader(file)
 header = []
 header = next(csvreader)
 for row in csvreader:
-    ind = header[0]
+    ind = int(row[0])
     cloth_dic[ind] = {}
     for i in range(1, len(header)):
         metric = header[i]
         if 'margin' in metric:
-            cloth_dic[ind].m = float(row[i])
+            cloth_dic[ind][metric] = float(row[i])
         elif metric == 'ctype':
             if  'Top' in row[i]:
                 cloth_dic[ind][metric] = ClothType.UPPER
             elif 'Bottom' in row[i]:
                 cloth_dic[ind][metric] = ClothType.LOWER
+
+print(cloth_dic)
         

@@ -14,7 +14,7 @@ class Speech:
             try:
                 text = r.recognize_google(audio)
                 self.text = text
-                print("updated: ",self.text)
+                print(self.text)
             except:
                 pass
         

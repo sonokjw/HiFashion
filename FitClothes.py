@@ -14,7 +14,7 @@ resize the given cloth based on distance
 of user from the screen
 '''
 
-def fitClothes(cloth, location, cloth_type, margin = 1.5):
+def fitClothes(cloth, location, cloth_type, margin):
     w = cloth.get_width()
     h = cloth.get_height()
     
@@ -32,7 +32,6 @@ def fitClothes(cloth, location, cloth_type, margin = 1.5):
         hip_w = calc_dist(location[3], location[2])
         dim_w = hip_w * (1 + margin) 
         dim_h = h / w * dim_w
-
     return pygame.transform.scale(cloth, (dim_w, dim_h))
 
 

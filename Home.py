@@ -1,6 +1,7 @@
 from operator import mod
 import pygame
 from Constant import *
+import time
 '''
 Home page: screen showing the user and outfits
 fitting onto them
@@ -69,7 +70,9 @@ class Home:
                 self.tracking = not self.tracking
         
         # voice commands detection
-        if 'fit' in text:
+        if 'my outfits' in text or 'my outfit' in text:
+            page = Modes.FAV
+        elif 'fit' in text:
             fit = True
             self.person = True
         elif 'clear' in text:
@@ -79,11 +82,10 @@ class Home:
             self.color = 0
         elif 'change color' in text and self.person:
             self.color += 1
+            time.sleep(0.5)
         elif  'picture' in text:
             screenshot = True
         elif 'closet' in text:
             page = Modes.CLOSET
-        elif 'my outfits' in text or 'my outfit' in text:
-            page = Modes.FAV
         
         return self.person, self.clothes_i, self.color, screenshot, self.tracking, fit, page
