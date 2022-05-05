@@ -1,6 +1,7 @@
 import pygame
 from Constant import *
 from Constant import Hanger
+import math
 '''
 Available clothes display page
 '''
@@ -71,11 +72,25 @@ class Closet:
     def get_page(self, page):
         if len(self.clothes) <= page * self.rows * self.img_per_row or page < 0:
             return
-        
+
         self.win.fill(MUTED_WHITE) # muted white
+        total_page = math.ceil(len(self.clothes) / (self.rows * self.img_per_row))
+        page_label = self.font.render("page " + str(page + 1)+"/" + str(total_page), 1, AQUA)
+        self.win.blit(page_label, LABEL_LOC3)
+
         label = self.font.render("Closet", 1, MUTED_BLACK)
         self.win.blit(label, LABEL_LOC2)
         
+        if page != 0:
+            label_l = self.font.render("Back", 1, MATCHA)
+            self.win.blit(label_l, (left_btn.pos[0] + 10, left_btn.pos[1] + 60))
+            left_btn.show(win=self.win)
+        if page != total_page - 1:
+            label_r = self.font.render("Next", 1, MATCHA)
+            self.win.blit(label_r, (right_btn.pos[0] - 40, right_btn.pos[1] + 60))
+            right_btn.show(win=self.win)
+
+
         self.page = page
         self.displaying = []
         start_i = self.page * self.img_per_row * self.rows

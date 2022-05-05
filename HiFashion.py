@@ -105,12 +105,14 @@ while not ended:
             if new_mode is not None:
                 cur_mode = new_mode
                 if change:
+                    home_pg.isBack = 0
                     closet_pg.to_closet()
         if cur_mode != Modes.CLOSET:
             new_mode, change = fav_btn.on_click(event, cur_mode)
             if new_mode is not None:
                 cur_mode = new_mode
                 if change:
+                    home_pg.isBack = 0
                     fav_pg.to_fav()
         
 
@@ -141,12 +143,23 @@ while not ended:
                     for i in range(len(cloth)):
                         new_clothes[clothes_ind][i].append(change_color(cloth[i], color))
             isBack = home_pg.getSide()
-            clothing = new_clothes[clothes_ind][home_pg.getSide()][ind] # cloth --> side ---> color
+            # print("clothes_ind: ", clothes_ind, "side: ", home_pg.getSide(), "ind", ind)
+            # print(new_clothes)
+            if len(cloth) > 1:
+                side = home_pg.getSide()
+            else:
+                side = 0
+            clothing = new_clothes[clothes_ind][side][ind] # cloth --> side ---> color
             margin = 'margin' if home_pg.getSide() == 0 else 'bmargin'
             clothing = fitClothes(clothing, body.locations, cloth_dic[clothes_ind]['ctype'], cloth_dic[clothes_ind][margin])
             coord = fitCoords(body.locations, cloth_dic[clothes_ind]['ctype'], cloth_dic[clothes_ind][margin + "_w"], cloth_dic[clothes_ind][margin + '_h'])
             # print("clothes at coord: ", coord)
+            label_l = font.render("Back", 1, MUTED_WHITE)
+            win.blit(label_l, (left_btn.pos[0] + 10, left_btn.pos[1]-40))
             left_btn.show(win=win)
+
+            label_r = font.render("Next", 1, MUTED_WHITE)
+            win.blit(label_r, (right_btn.pos[0] - 40, right_btn.pos[1]-40))
             right_btn.show(win=win)
             win.blit(clothing, coord)
         # taking a screenshot

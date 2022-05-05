@@ -1,4 +1,6 @@
 import pygame
+from Constant import * 
+import math
 '''
 Favorite Outfits (screenshots) display page
 '''
@@ -90,6 +92,16 @@ class Fav:
         label = self.font.render("Saved Outfits", 1, MUTED_BLACK)
         self.win.blit(label, LABEL_LOC)
         
+        total_page = math.ceil(len(self.outfits) / (self.rows * self.img_per_row))
+        if page != 0:
+            label_l = self.font.render("Back", 1, MATCHA)
+            self.win.blit(label_l, (fav_left_btn.pos[0] + 10, fav_left_btn.pos[1] - 40))
+            fav_left_btn.show(win=self.win)
+        if page != total_page - 1:
+            label_r = self.font.render("Next", 1, MATCHA)
+            self.win.blit(label_r, (fav_right_btn.pos[0] - 40, fav_right_btn.pos[1] - 40))
+            fav_right_btn.show(win=self.win)
+
         self.page = page
 
         start_i = self.page * self.img_per_row * self.rows

@@ -32,6 +32,7 @@ DARKEN = 30 # how much to darken the button when hovering
 DISPLAY_SIZE = 250
 LABEL_LOC = (480, 50)
 LABEL_LOC2 = (520, 50)
+LABEL_LOC3 = (520, 500)
 MUTED_WHITE = (249, 245, 236)
 MUTED_BLACK = (18,18,18)
 X = 50  # horizontal starting point
@@ -128,7 +129,7 @@ class Hanger:
         self.prev = 0 
         self.hovering = 0
         self.rect = cloth[self.hovering].get_rect(topleft=position)
-        print(self.ind,": ", len(self.cloth))
+        # print(self.ind,": ", len(self.cloth))
     
     def setPos(self, pos):
         self.pos = pos
@@ -143,7 +144,7 @@ class Hanger:
             pygame.draw.rect(self.cloth[self.hovering], MUTED_WHITE, [0, 0, width, height], 1)
         
         if len(self.cloth) == 2:
-            print("!!!!!!!!!!!!!!!!!!hovering!!!!!!!!!!!!",self.hovering)
+            # print("!!!!!!!!!!!!!!!!!!hovering!!!!!!!!!!!!",self.hovering)
             win.blit(self.cloth[self.hovering], self.pos)
         else:
             win.blit(self.cloth[0], self.pos)
@@ -152,7 +153,7 @@ class Hanger:
         # print("~~~~~~~~~~~~~~~~getting on click ~~~~~~~~~~", event)
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
-            print("collided????????????")
+            # print("collided????????????")
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     self.selected = not self.selected
@@ -209,5 +210,8 @@ right_icon = pygame.transform.scale(pygame.image.load("icons/right.png"), (int(I
 right_icon_hover = pygame.transform.scale(pygame.image.load("icons/right.png"), (int(ICON_SIZE[0]/1.5), int(ICON_SIZE[1]/1.5)))
 right_icon_hover.fill((DARKEN, DARKEN, DARKEN), special_flags=pygame.BLEND_RGB_SUB)
 
-left_btn = Button([left_icon, left_icon_hover], (5, WIN_HEIGHT//2 - 50), None)
-right_btn = Button([right_icon, right_icon_hover], (WIN_WIDTH - 80, WIN_HEIGHT//2 - 50), None)
+left_btn = Button([left_icon, left_icon_hover], (5, WIN_HEIGHT//2 + 50), None)
+right_btn = Button([right_icon, right_icon_hover], (WIN_WIDTH - 80, WIN_HEIGHT//2 + 50), None)
+
+fav_left_btn = Button([left_icon, left_icon_hover], (5, WIN_HEIGHT//2 - 260), None)
+fav_right_btn = Button([right_icon, right_icon_hover], (WIN_WIDTH - 80, WIN_HEIGHT//2 - 260), None)

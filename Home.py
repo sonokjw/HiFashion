@@ -73,6 +73,7 @@ class Home:
         # voice commands detection
         if 'my outfits' in text or 'my outfit' in text:
             page = Modes.FAV
+            self.isBack = 0
         elif 'fit' in text:
             fit = True
             self.person = True
@@ -95,6 +96,7 @@ class Home:
             screenshot = True
         elif 'closet' in text:
             page = Modes.CLOSET
+            self.isBack = 0
         elif 'turn' in text:
             self.isBack = 1 if self.isBack == 0 else 0
             time.sleep(0.5)
