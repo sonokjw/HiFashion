@@ -13,9 +13,10 @@ class Home:
         self.pressing = False
         self.color = 0
         self.cur_key = None
-        self.clothes_i = 0 # i of clothes being displayed
+        self.clothes_i = 0 # i of selected clothes being displayed
         self.num_clothes = num_clothes
         self.tracking = False
+        self.isBack = 0 # whether it's displaying the back of the current clothes
 
     '''
     Detect key press and voice commands.
@@ -80,12 +81,29 @@ class Home:
         elif 'next' in text and self.person:
             self.clothes_i = (self.clothes_i+1) % self.num_clothes
             self.color = 0
+            self.isBack = 0
+            fit = True
+        elif 'back' in text and self.person:
+            self.clothes_i = (self.clothes_i-1) % self.num_clothes
+            self.color = 0
+            self.isBack = 0
+            time.sleep(0.5)
         elif 'change color' in text and self.person:
             self.color += 1
             time.sleep(0.5)
-        elif  'picture' in text:
+        elif 'picture' in text:
             screenshot = True
         elif 'closet' in text:
             page = Modes.CLOSET
+        elif 'turn' in text:
+            self.isBack = 1 if self.isBack == 0 else 0
+            time.sleep(0.5)
         
         return self.person, self.clothes_i, self.color, screenshot, self.tracking, fit, page
+
+    def setNumClothes(self, num):
+        self.num_clothes = num
+
+
+    def getSide(self):
+        return self.isBack

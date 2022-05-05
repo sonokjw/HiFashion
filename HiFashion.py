@@ -83,7 +83,7 @@ fav_btn = Button([fav_icon, fav_icon_hover], (25, WIN_HEIGHT-100), Modes.FAV)
 
 # App pages Setup
 home_pg = Home(NUM_CLOTHES)
-closet_pg = Closet(win, clothes, font)
+closet_pg = Closet(win, clothes_dict, font) # Closet(win, clothes, font)
 fav_pg = Fav(win, font)
 
 # Tracking tools setup
@@ -91,10 +91,13 @@ body = Body(WIN_WIDTH, WIN_HEIGHT)
 speech = Speech()
 cur_time = pygame.time.get_ticks()
 
+person = False # whether to start detecting people
+
 ########### App Loop ###########
 while not ended:
     # buttons or quit events
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type ==  pygame.QUIT:
             ended = True
         if cur_mode != Modes.FAV:
@@ -109,6 +112,7 @@ while not ended:
                 cur_mode = new_mode
                 if change:
                     fav_pg.to_fav()
+        
 
     # speech detection
     if threading.active_count() <= 1:
@@ -118,23 +122,31 @@ while not ended:
     if cur_mode == Modes.HOME:
         image = cam.get_image()
         win.blit(image, (0,0))
+        home_pg.setNumClothes(closet_pg.getNumSelected())
         person, clothes_i, color_i, screenshot, tracking, fit, page = home_pg.update(speech.text)
 
-        if person:
+        if person and closet_pg.getNumSelected() != 0:
             if fit:
                 body.track(image)
-            cloth = clothes[clothes_i]
+            cloth_hanger = closet_pg.getSelected()[clothes_i]
+            clothes_ind = cloth_hanger.ind
+            cloth = cloth_hanger.cloth
             # change color
             ind = color_i % (len(MORANDI) + 1)
-            if clothes_i not in new_clothes:
-                new_clothes[clothes_i] = [cloth]
+            if clothes_ind not in new_clothes:
+                new_clothes[clothes_ind] = {0:[cloth[0]], 1:[]} # 0 front, 1 back    
+                if len(cloth) > 1:
+                    new_clothes[clothes_ind][1].append(cloth[1])
                 for color in MORANDI:
-                    new_clothes[clothes_i].append(change_color(cloth, color))
-            cloth = new_clothes[clothes_i][ind]
-            cloth = fitClothes(cloth, body.locations, cloth_dic[clothes_i]['ctype'], cloth_dic[clothes_i]['margin'])
-            coord = fitCoords(body.locations, cloth_dic[clothes_i]['ctype'], cloth_dic[clothes_i]['margin_w'], cloth_dic[clothes_i]['margin_h'])
+                    for i in range(len(cloth)):
+                        new_clothes[clothes_ind][i].append(change_color(cloth[i], color))
+            isBack = home_pg.getSide()
+            clothing = new_clothes[clothes_ind][home_pg.getSide()][ind] # cloth --> side ---> color
+            margin = 'margin' if home_pg.getSide() == 0 else 'bmargin'
+            clothing = fitClothes(clothing, body.locations, cloth_dic[clothes_ind]['ctype'], cloth_dic[clothes_ind][margin])
+            coord = fitCoords(body.locations, cloth_dic[clothes_ind]['ctype'], cloth_dic[clothes_ind][margin + "_w"], cloth_dic[clothes_ind][margin + '_h'])
             # print("clothes at coord: ", coord)
-            win.blit(cloth, coord)
+            win.blit(clothing, coord)
         # taking a screenshot
         if screenshot:
             fav_pg.saveOutfit(win)
@@ -154,7 +166,7 @@ while not ended:
             cur_mode = Modes.FAV
             fav_pg.to_fav()
     elif cur_mode == Modes.CLOSET:
-        to_home = closet_pg.update(speech.text)
+        to_home = closet_pg.update(speech.text, events)
         if to_home:
             cur_mode = Modes.HOME
     else: # Fav
@@ -167,6 +179,9 @@ while not ended:
         closet_btn.show(win=win)
     if cur_mode != Modes.CLOSET:
         fav_btn.show(win=win)
+    if cur_mode == Modes.HOME and person:
+        left_btn.show(win=win)
+        right_btn.show(win=win)
     
     pygame.display.update()
         

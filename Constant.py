@@ -1,5 +1,6 @@
 import enum
 import csv
+from tkinter import N
 import pygame
 '''
 All the constants, helpful functions or classes here
@@ -27,6 +28,16 @@ MUTED_WHITE = (249, 245, 236)
 MUTED_BLACK = (18,18,18)
 
 DARKEN = 30 # how much to darken the button when hovering
+
+DISPLAY_SIZE = 250
+LABEL_LOC = (480, 50)
+LABEL_LOC2 = (520, 50)
+MUTED_WHITE = (249, 245, 236)
+MUTED_BLACK = (18,18,18)
+X = 50  # horizontal starting point
+Y = 150 # vertical starting point
+DIST = 25 # distance between images
+
 
 # all possible pages of apps
 class Modes(enum.Enum):
@@ -59,6 +70,7 @@ for row in csvreader:
             elif 'Bottom' in row[i]:
                 cloth_dic[ind][metric] = ClothType.LOWER
 
+
 '''
 images: [icon, icon_hover] a list of two icon images
 position: (x, y) coordinates of top-left of button
@@ -79,6 +91,9 @@ class Button:
             win.blit(self.images[0], self.pos)
  
     def change_mode(self, cur_mode):
+        # if self.mode is None:
+        #     return cur_mode, False
+
         if cur_mode == self.mode:
             print("Current mode:", cur_mode)
             return Modes.HOME, False
@@ -105,7 +120,7 @@ position: (x, y) coordinates of top-left of button
 selected: if the cloth is slescted
 '''
 class Hanger:
-    def __init___(self, position, cloth, ind):
+    def __init__(self, position, cloth, ind):
         self.pos = position
         self.selected = False
         self.cloth = cloth
@@ -113,25 +128,42 @@ class Hanger:
         self.prev = 0 
         self.hovering = 0
         self.rect = cloth[self.hovering].get_rect(topleft=position)
+        print(self.ind,": ", len(self.cloth))
+    
+    def setPos(self, pos):
+        self.pos = pos
+        self.rect = self.cloth[self.hovering].get_rect(topleft=pos)
 
     def show(self, win):
-        win.blit(self.cloth[self.hovering], self.pos)
+        width = self.cloth[self.hovering].get_width()
+        height = self.cloth[self.hovering].get_height()
+        if self.selected:
+            pygame.draw.rect(self.cloth[self.hovering], AQUA, [0, 0, width, height], 1)
+        else:
+            pygame.draw.rect(self.cloth[self.hovering], MUTED_WHITE, [0, 0, width, height], 1)
+        
+        if len(self.cloth) == 2:
+            print("!!!!!!!!!!!!!!!!!!hovering!!!!!!!!!!!!",self.hovering)
+            win.blit(self.cloth[self.hovering], self.pos)
+        else:
+            win.blit(self.cloth[0], self.pos)
 
     def on_click(self, event):
+        # print("~~~~~~~~~~~~~~~~getting on click ~~~~~~~~~~", event)
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
+            print("collided????????????")
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
-                    width = self.cloth.get_width()
-                    height = self.cloth.get_height()
-                    pygame.draw.rect(self.cloth, AQUA, [0, 0, width, height], 1)
                     self.selected = not self.selected
             self.prev = self.hovering
-            self.hovering = 1
+            if len(self.cloth) > 1:
+                self.hovering = 1
+                return True
         else:
             self.prev = self.hovering
             self.hovering = 0
-        return self.prev == self.hovering
+        return self.prev != self.hovering
 
     
 
@@ -155,15 +187,27 @@ def load_clothes():
         except:
             break
         i += 1
-    
     # load clothes back images if exists
     for j in range(i):
         try:
             img = pygame.image.load(f'clothes/{j}b.png')
             dim = (IMAGE_WIDTH, int(float(img.get_height())/img.get_width()*IMAGE_WIDTH))
             c = pygame.transform.scale(img, dim)
-            clothes[i].append(c)
+            clothes[j].append(c)
         except:
             pass
     
     return clothes
+
+
+# Back and Next buttons
+left_icon = pygame.transform.scale(pygame.image.load("icons/left.png"), (int(ICON_SIZE[0]/1.5), int(ICON_SIZE[1]/1.5)))
+left_icon_hover = pygame.transform.scale(pygame.image.load("icons/left.png"), (int(ICON_SIZE[0]/1.5), int(ICON_SIZE[1]/1.5)))
+left_icon_hover.fill((DARKEN, DARKEN, DARKEN), special_flags=pygame.BLEND_RGB_SUB)
+
+right_icon = pygame.transform.scale(pygame.image.load("icons/right.png"), (int(ICON_SIZE[0]/1.5), int(ICON_SIZE[1]/1.5)))
+right_icon_hover = pygame.transform.scale(pygame.image.load("icons/right.png"), (int(ICON_SIZE[0]/1.5), int(ICON_SIZE[1]/1.5)))
+right_icon_hover.fill((DARKEN, DARKEN, DARKEN), special_flags=pygame.BLEND_RGB_SUB)
+
+left_btn = Button([left_icon, left_icon_hover], (5, WIN_HEIGHT//2 - 50), None)
+right_btn = Button([right_icon, right_icon_hover], (WIN_WIDTH - 80, WIN_HEIGHT//2 - 50), None)
