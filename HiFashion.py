@@ -146,6 +146,8 @@ while not ended:
             clothing = fitClothes(clothing, body.locations, cloth_dic[clothes_ind]['ctype'], cloth_dic[clothes_ind][margin])
             coord = fitCoords(body.locations, cloth_dic[clothes_ind]['ctype'], cloth_dic[clothes_ind][margin + "_w"], cloth_dic[clothes_ind][margin + '_h'])
             # print("clothes at coord: ", coord)
+            left_btn.show(win=win)
+            right_btn.show(win=win)
             win.blit(clothing, coord)
         # taking a screenshot
         if screenshot:
@@ -179,9 +181,6 @@ while not ended:
         closet_btn.show(win=win)
     if cur_mode != Modes.CLOSET:
         fav_btn.show(win=win)
-    if cur_mode == Modes.HOME and person:
-        left_btn.show(win=win)
-        right_btn.show(win=win)
     
     pygame.display.update()
         
