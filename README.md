@@ -43,6 +43,8 @@ $ deactivate
 - favs (directory)  
 - icons (directory)  
 - Body  
+Body is a class that basically provides body tracking service for the app. It has three functions: `track(self, img)`, `in_sight(self, coor)`, and `draw(self, win)`. The `track(self, img)` function allows the app to pass in an image captured by the webcam and retrieve the on-screen coordinates of the shoulder and hip joints’ coordinates if a person is in the image. The `in_sight(self, coor)` is a helper method that returns a coordinate only if the coordinate is within the screen boundary. The `draw(self, win)` function draws out the skeleton of shoulders with a red line and the hip skeleton with a blue line, if they are visible on the screen.
+
 - ChangeColor  
 - Closet  
 - Constant  
