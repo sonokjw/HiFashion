@@ -9,7 +9,9 @@ HiFashion is a laptop application in which users can select clothes from the clo
 ### I. Instruction to run:
 
 In the current stage, the app only supports running on **MacOS** and **not with M1 Chip**.  
-Make sure to have Python 3.6+.
+Make sure to have Python 3.6+.  
+
+Below is the step by step guide:
 
 ##### Activate a Python virtual environment:
 
