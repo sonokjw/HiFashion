@@ -59,6 +59,15 @@ $ deactivate
   
 - Closet  
 
+  A class that corresponds to the Closet in the app and responsible for updates occurring while the user is in Closet.  
+  
+  - `to_closet(self)`: Called when the user decides to enter the Closet. It will direct the user to the page where the user has left off last time (or page 1 if it is the first time the user enters here).
+  - `update(self, text, event)`: Checks for keyboard commands, voice commands `text`, and mouse hover/click `event` for clothes selection, after which it should update the instance variables and executes the command (page changing, clothes selection, exit Closet, etc.) accordingly.
+  - `get_page(self, page)`: Goes to the given `page` in Closet, if within the page boundaries, and update the screen with the page.
+  - `organizeClothes(self, clothes)`: Takes in a dictionary of clothes_ind mapped to images of the clothes `[front, back (optional)]`, and create a list of Hanger instances, one for each clothes. Images are rescaled such that they all fit into a bounding box with pre-set dimensions for the purpose of better displaying.
+  - `rescale(self, img)`: Rescales the given `img` such that it fits into a bounding box of dimensions set by us.
+  - `getSelected(self)`: Returns the list of selected Hangers (clothes).
+  - `getNumSelected(self)`: Returns number of selected clothes.
 
 - Constant  
 
