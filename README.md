@@ -76,7 +76,7 @@ $ deactivate
   
 - HiFashion  
 
-
+  The main integrator file that supports the application's user interaction mechanism and navigation through different pages of the app.
 - Home  
 
   A class that corresponds to the Home page in the app, in which the user sees himself/herself on the screen, and responsible for any interactions happening in this page.  
