@@ -44,6 +44,7 @@ $ deactivate
   A directory for all the clothes in the closet. Images will be in `.png` format, and the naming convention for clothes' front images will be consecutive integers starting from 0. For back images, which are optional, it will be in the format of integer + 'b' with integer the same as the clothes' front images. It also has a .csv file which is used for storing the three offsets for each clothes image.
   
 - favs (directory)  
+  A directory for all saved pictures that are displayed in Saved Outfits Gallery page.
 - icons (directory)  
 - Body  
 
