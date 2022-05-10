@@ -2,7 +2,7 @@
 
 ## A virtual Closet
 
-### Instruction to run (MacOS):
+### Instruction to run (Currently, it only supports MacOS):
 
 Make sure to have Python 3.6+
 

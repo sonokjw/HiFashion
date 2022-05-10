@@ -6,6 +6,9 @@ class Speech:
     def __init__(self):
         self.text = ""
 
+    '''
+    Update text by listening through laptop microphone
+    '''
     def get_text(self):
         self.text = ""
         with sr.Microphone() as source:

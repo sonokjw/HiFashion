@@ -3,10 +3,16 @@ from Constant import *
 from Constant import Hanger
 import math
 '''
-Available clothes display page
+Module/Page that shows all the available clothes in the closet
 '''
 
 class Closet:
+
+    '''
+    win: app window
+    clothes: a list of Hanger objects
+    font: pygame font used for text
+    '''
     def __init__(self, win, clothes, font):
         self.win = win
         self.font = font
@@ -21,11 +27,20 @@ class Closet:
         self.clothes_out = [] # copy to be passed out (without modification)
         self.organizeClothes(clothes)
     
+    '''
+    Go to the closet 
+    (will be to the page where user left last time)
+    '''
     def to_closet(self):
         self.get_page(self.page)
 
+    '''
+    Update on reacting to keyboard/voice commands and mouse click
+    '''
     def update(self, text, event):
         to_home = False
+        
+        # keyboard commands
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]: # next page
             if not self.pressing:
@@ -44,6 +59,7 @@ class Closet:
                 self.get_page(self.page - 1)
                 print('previous page')
 
+        # voice commands
         txt_ls = text.split(" ")
         if "back" in txt_ls:
             self.get_page(self.page - 1)
@@ -53,7 +69,7 @@ class Closet:
             to_home = True
             print(self.getSelected())
 
-
+        # mouse click
         for i in self.displaying:
             changed = 0
             for ev in event:
@@ -67,7 +83,7 @@ class Closet:
         return to_home
 
     '''
-    display saved outfits at given page
+    Display saved outfits at given page
     '''
     def get_page(self, page):
         if len(self.clothes) <= page * self.rows * self.img_per_row or page < 0:
@@ -113,18 +129,6 @@ class Closet:
     '''
     def organizeClothes(self, clothes):
         for i in range(len(clothes)):
-            # w = self.clothes[i][0].get_width()
-            # h = self.clothes[i][0].get_height()
-
-            # # default width/height scale bounded by display_size
-            # if h > w:
-            #     ratio = DISPLAY_SIZE / h
-            #     dim = (ratio * w, DISPLAY_SIZE)
-            # else:
-            #     ratio = DISPLAY_SIZE / w
-            #     dim = (DISPLAY_SIZE, ratio * h)
-            # self.clothes[i][0] = pygame.transform.scale(self.clothes[i][0], dim)
-            
             # rescale the clothes images
             clothes[i] = [self.rescale(clothes[i][j]) for j in range(len(clothes[i]))]
             cur_c = Hanger((-1, -1), clothes[i], i)
@@ -168,5 +172,6 @@ class Closet:
                 clothes.append(self.clothes_out[i])
         return clothes
 
+    # return number of selected clothes
     def getNumSelected(self):
         return sum(self.selected)

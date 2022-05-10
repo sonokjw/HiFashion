@@ -19,26 +19,11 @@ from threading import Thread
 import threading
 
 
-cur_mode = Modes.HOME # current screen of app
-ended = False # whether app exited
-
 # Load Clothes
-# transparent clothes: https://www.transparentpng.com/cats/shirt-1436.html
 clothes_dict = load_clothes()
 
-clothes = []
-i = 0
-while True:
-    try:
-        img = pygame.image.load(f'clothes/{i}.png')
-        dim = (IMAGE_WIDTH, int(float(img.get_height())/img.get_width()*IMAGE_WIDTH))
-        c = pygame.transform.scale(img, dim)
-        clothes.append(c)
-    except:
-        break
-    i += 1
 
-NUM_CLOTHES = i
+NUM_CLOTHES = len(clothes_dict)
 NUM_COLOR = 1
 
 new_clothes = {} # a dictionary saving new clothing colors based on color scheme
@@ -47,14 +32,13 @@ new_clothes = {} # a dictionary saving new clothing colors based on color scheme
 if len(sys.argv) > 1:
     NUM_CLOTHES = min(NUM_CLOTHES, int(sys.argv[1]))
 
-# App Display Setup
+# App Screen and Webcam Setup
 pygame.init()
 pygame.camera.init()
 
 win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 pygame.display.set_caption("HiFashion")
 
-# Webcam Setup
 user_cam = pygame.camera.list_cameras()[0]
 cam = pygame.camera.Camera(user_cam, (CAM_WIDTH, CAM_HEIGHT))
 cam.start()
@@ -92,6 +76,9 @@ speech = Speech()
 cur_time = pygame.time.get_ticks()
 
 person = False # whether to start detecting people
+
+cur_mode = Modes.HOME # current screen of app
+ended = False # whether app exited
 
 ########### App Loop ###########
 while not ended:

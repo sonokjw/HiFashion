@@ -2,7 +2,7 @@ import pygame
 from Constant import * 
 import math
 '''
-Favorite Outfits (screenshots) display page
+Favorite (Saved) Outfits (screenshots) display page
 '''
 
 OUTFIT_WIDTH = 350
@@ -11,26 +11,35 @@ MUTED_WHITE = (249, 245, 236)
 MUTED_BLACK = (18,18,18)
 
 class Fav:
+    '''
+    win: window of the app
+    font: font for text in the page
+    '''
     def __init__(self, win, font):
         self.win = win
         self.font = font
         self.page = 0
         self.rows = 2
         self.height = 250
-        self.outfits = []
+        self.outfits = [] # list of saved screenshots
         self.pressing = False
         self.cur_key = None
 
         self.compute_format()
     
+    # Go to the page where the user left off last time
     def to_fav(self):
         self.get_page(self.page)
 
     '''
-    Detection of commands of going to different pages
+    Detection of commands of going to different pages.
+    
+    text: transcripts of speech
     '''
     def update(self, text):
         to_home = False
+        
+        # keyboard commands
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]: # next page
             if not self.pressing:
@@ -49,6 +58,7 @@ class Fav:
                 self.get_page(self.page - 1)
                 print('previous page')
         
+        # voice commands
         txt_ls = text.split(" ")
         if "back" in txt_ls:
             self.get_page(self.page - 1)
@@ -61,7 +71,7 @@ class Fav:
         
     
     '''
-    Initialization of previous saved outfits and class variables
+    Initialization of previous saved outfits and class variables.
     '''
     def compute_format(self):
         w, h = self.win.get_width(), self.win.get_height()
@@ -82,7 +92,7 @@ class Fav:
             self.height = self.outfits[0].get_height()
 
     '''
-    display saved outfits at given page
+    Display saved outfits at given page.
     '''
     def get_page(self, page):
         if len(self.outfits) <= page * self.rows * self.img_per_row or page < 0:
@@ -118,7 +128,7 @@ class Fav:
 
     '''
     Save the current screenshot to saved outfits, located in /favs
-    in files, and add it to Saved Outfit page
+    in files, and add it to Saved Outfit page.
     img: screenshot to be saved
     '''
     def saveOutfit(self, img):

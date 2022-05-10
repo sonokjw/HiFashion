@@ -1,6 +1,5 @@
 import enum
 import csv
-from tkinter import N
 import pygame
 '''
 All the constants, helpful functions or classes here
@@ -118,23 +117,29 @@ class Button:
 cloth: the selected cloth image [front, back]
 ind: the index of the cloth in cloth_dic
 position: (x, y) coordinates of top-left of button
-selected: if the cloth is slescted
 '''
 class Hanger:
     def __init__(self, position, cloth, ind):
         self.pos = position
-        self.selected = False
+        self.selected = False # whether the clothes is selected
         self.cloth = cloth
         self.ind = ind
         self.prev = 0 
         self.hovering = 0
         self.rect = cloth[self.hovering].get_rect(topleft=position)
-        # print(self.ind,": ", len(self.cloth))
     
+    # set position of Hanger to pos
     def setPos(self, pos):
         self.pos = pos
         self.rect = self.cloth[self.hovering].get_rect(topleft=pos)
 
+
+    '''
+    Show the clothes onto the screen, with or without the selection 
+    box and front or back of clothes depending on whether it is hovered or not.
+    
+    win: window of the app to display on
+    '''
     def show(self, win):
         width = self.cloth[self.hovering].get_width()
         height = self.cloth[self.hovering].get_height()
@@ -144,16 +149,14 @@ class Hanger:
             pygame.draw.rect(self.cloth[self.hovering], MUTED_WHITE, [0, 0, width, height], 1)
         
         if len(self.cloth) == 2:
-            # print("!!!!!!!!!!!!!!!!!!hovering!!!!!!!!!!!!",self.hovering)
             win.blit(self.cloth[self.hovering], self.pos)
         else:
             win.blit(self.cloth[0], self.pos)
 
+    # checking whether the mouse is hovering or clicked
     def on_click(self, event):
-        # print("~~~~~~~~~~~~~~~~getting on click ~~~~~~~~~~", event)
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
-            # print("collided????????????")
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     self.selected = not self.selected

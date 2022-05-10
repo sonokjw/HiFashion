@@ -1,8 +1,6 @@
-from tracemalloc import start
 import mediapipe as mp
 import pygame.image
 import pygame.draw
-import numpy as np
 
 '''
 Tracks the body of the user, if in sight
@@ -19,6 +17,11 @@ BG_COLOR = GRAY
 STROKE = 3
 
 class Body:
+
+    '''
+    win_w: width of the screen window
+    win_h: height of the screen window
+    '''
     def __init__(self, win_w, win_h):
         self.locations = [None]*4
         self.screen_dim = (win_w, win_h)
@@ -48,7 +51,7 @@ class Body:
             results = pose.process(view)
 
             if results.pose_landmarks:
-                # get desired to-scale coordinates
+                # get desired on-screen coordinates
                 # Note: since we are having webcams, it's reversed
                 right_shoulder = (results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x * img.get_width(),\
                     results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].y * img.get_height())
@@ -60,11 +63,10 @@ class Body:
                     results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP].y * img.get_height())
                 self.locations = [self.in_sight(left_shoulder), self.in_sight(right_shoulder), self.in_sight(left_hip), self.in_sight(right_hip)]
 
-        # print(locations)
         return self.locations
         
     '''
-    check whether coor is within the boundary of the screen
+    Check whether coor is within the boundary of the screen.
 
     return: coor if in-sight, else None
     '''
@@ -73,6 +75,10 @@ class Body:
             return coor
         return None
 
+    '''
+    Draw the skeleton of shoulders in a red line and hips 
+    in a blue line on the given window screen.
+    '''
     def draw(self, win):
         if self.locations[0] and self.locations[1]:
             pygame.draw.line(win, RED, self.locations[0], self.locations[1], STROKE)
