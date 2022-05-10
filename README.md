@@ -44,7 +44,7 @@ $ deactivate
 - icons (directory)  
 - Body  
 
-  Body is a class that basically provides body tracking service for the app. 
+  A class that provides the body tracking service for the app. 
   - `track(self, img)`: Allows the app to pass in an image captured by the webcam and retrieve the on-screen coordinates of the shoulder and hip joints’ coordinates if a person is in the image. 
   - `in_sight(self, coor)`: A helper method that returns a coordinate only if the coordinate is within the screen boundary.
   - `draw(self, win)`: Draws out the skeleton of shoulders with a red line and the hip skeleton with a blue line, if they are visible on the screen.  
@@ -54,7 +54,7 @@ $ deactivate
 - Constant  
 - Fav  
 
-  Fav is a class that corresponds to the Favorite (or Saved) Outifts Gallery in the app.
+  A class that corresponds to the Favorite (or Saved) Outifts Gallery in the app.
   - `to_fav(self)`: Called when the user decides to enter the saved outfits gallery. It will direct the user to the page where the user has left off last time (or page 1 if it is the first time the user enters here).
   - `update(self, text)`: Check for keyboard or voice commands and and update the statuses (which page the user is on, whether the user wants to exit the gallery) accordingly.
   - `compute_format(self)`: Called during initialization of the page to resize the image while preserving proportions for easier displaying and determine how many images per row.
