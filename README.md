@@ -39,18 +39,17 @@ $ deactivate
 
 ### II. File Descriptions  
 
-#### clothes (directory)  
-
-#### favs (directory)  
-#### icons (directory)  
-#### Body  
-#### ChangeColor  
-#### Closet  
-#### Constant  
-#### Fav  
-#### FitClothes  
-#### HiFashion  
-#### Home  
-#### Speech  
+- clothes (directory)  
+- favs (directory)  
+- icons (directory)  
+- Body  
+- ChangeColor  
+- Closet  
+- Constant  
+- Fav  
+- FitClothes  
+- HiFashion  
+- Home  
+- Speech  
 
 
