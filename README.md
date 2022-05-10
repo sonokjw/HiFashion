@@ -52,7 +52,8 @@ $ deactivate
 
 - ChangeColor  
 
-
+  Functions that support color changing for clothings: `lumiChromi(pixel)`, `change_color(cloth, new_color)`. The `lumiChromi(pixel)` returns a luminance and chrominance map of a pixel of an image. The `change_color(cloth, new_color)` changes the color scheme to the new color by replacing the chrominance map of the clothing image according to the new color.  
+  
 - Closet  
 
 
@@ -71,7 +72,8 @@ $ deactivate
 
 - FitClothes  
 
-
+  Functions that support clothes fitting: `calc_dist(loc1, loc2)`, `fitClothes(cloth, location, cloth_type, margin)`, `fitCoords (location, cloth_type, margin_w, margin_h)`. The function `fitClothes(cloth, location, cloth_type, margin)` fits the clothes on the body according to where the fitting point should be located on the user's body. The function `fitCoords (location, cloth_type, margin_w, margin_h)` aligns body fitting point with the left most shoulder point of the clothing.  
+  
 - HiFashion  
 
 
