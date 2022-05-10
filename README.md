@@ -40,6 +40,9 @@ $ deactivate
 ### II. File Descriptions  
 
 - clothes (directory)  
+
+  A directory for all the clothes in the closet. Images will be in `.png` format, and the naming convention for clothes' front images will be consecutive integers starting from 0. For back images, which are optional, it will be in the format of integer + 'b' with integer the same as the clothes' front images. It also has a .csv file which is used for storing the three offsets for each clothes image.
+  
 - favs (directory)  
 - icons (directory)  
 - Body  
@@ -59,6 +62,13 @@ $ deactivate
 
 - Constant  
 
+  Stores constants, classes, and helper functions needed for different pages of the app.  
+
+  - constants: mainly the RGB color values, coordinates, and integers. 
+  - processing of photos and margin data located in clothes(directory)
+  - Button (class): Creates functionality of buttons wiht functions such as `on_click, show`, `change_mode`. 
+  - Hanger (class): Stores all necessary information for a single clothes including its front and back views. It is also responsible for closet interactions of clothes through `on_click` and `show functions`.  
+  - `load_clothes()`: Loads clothes from the clothes directory returns a dictionary mapping the clothes number to a list of images `[front, back]` in which `back` is optional.
 
 - Fav  
 
